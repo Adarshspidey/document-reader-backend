@@ -5,7 +5,6 @@ const port = 5000;
 const cors = require("cors");
 // const jwt = require("jsonwebtoken");
 const AuthorRouter = require("./Routes/Author");
-const PeerRouter = require("./Routes/Peer");
 const SignupRouter = require("./Routes/Auth");
 const DocumentRouter = require("./Routes/Document");
 app.use(express.json());
@@ -26,7 +25,6 @@ app.get("/", (req, res) => {
 });
 
 app.use("/author", AuthorRouter);
-app.use("/peer", PeerRouter);
 app.use("/user", SignupRouter);
 app.use("/document", DocumentRouter);
 

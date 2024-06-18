@@ -4,4 +4,22 @@ const generateToken = (id, type, permissions) => {
   return token;
 };
 
-module.exports = { generateToken };
+const verifyToken = (req, res, next) => {
+  const authHeader = req.header("Authorization");
+  if (!authHeader) {
+    return res.status(401).json({ message: "No token, authorization denied" });
+  }
+
+  const token = authHeader.replace("Bearer ", "");
+  
+  try {
+    const decoded = jwt.verify(token, "my_secret_key");
+    req.admin = decoded.id;
+    next();
+  } catch (err) {
+    res.status(401).json({ message: "Token is not valid" });
+  }
+};
+
+
+module.exports = { generateToken,verifyToken };

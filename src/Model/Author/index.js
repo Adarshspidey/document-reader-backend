@@ -8,7 +8,18 @@ const getByEmail = async (email) => await Author.findOne({ email });
 
 const getDataByEmail = async (email) => {
   const author = await Author.findOne({ email });
-  return author ? author : null; 
+  return author ? author : null;
 };
 
-module.exports = { createAuthor, getAuthor, getByEmail, getDataByEmail };
+const findAuthorById = async (id) => {
+  const admin = await Author.findById(id);
+  return admin ? admin : null;
+};
+
+module.exports = {
+  createAuthor,
+  getAuthor,
+  getByEmail,
+  getDataByEmail,
+  findAuthorById,
+};
