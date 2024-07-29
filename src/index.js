@@ -7,6 +7,7 @@ const cors = require("cors");
 const AuthorRouter = require("./Routes/Author");
 const SignupRouter = require("./Routes/Auth");
 const DocumentRouter = require("./Routes/Document");
+const AuditRouter = require("./Routes/AuditLog");
 app.use(express.json());
 app.use(cors());
 
@@ -27,6 +28,7 @@ app.get("/", (req, res) => {
 app.use("/author", AuthorRouter);
 app.use("/user", SignupRouter);
 app.use("/document", DocumentRouter);
+app.use("/audit", AuditRouter);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

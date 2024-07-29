@@ -1,5 +1,7 @@
 const Document = require("../../../Model/Document");
 const Author = require("../../../Model/Author");
+const AuditLog = require("../../../Model/AuditLog");
+const { getIP } = require("../../../Utils/GetIp");
 
 const UpdateDocument = async (req, res) => {
   // Fetch admin
@@ -36,6 +38,13 @@ const UpdateDocument = async (req, res) => {
 
   // Save the updated document
   const updatedDocument = await Document.updateDocument(document);
+
+  const auditLog = await AuditLog.createAuditLog({
+    userId: req.admin,
+    documentId: documentId,
+    action: "edit_document",
+    ip: getIP(req),
+  });
 
   res.send({ message: "Document Updated Successfully", data: updatedDocument });
 };

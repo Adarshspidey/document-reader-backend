@@ -1,5 +1,7 @@
 const Document = require("../../../Model/Document");
 const Author = require("../../../Model/Author");
+const AuditLog = require("../../../Model/AuditLog");
+const { getIP } = require("../../../Utils/GetIp");
 
 const GetDocument = async (req, res) => {
   const admin = await Author.findAuthorById(req.admin);
@@ -24,6 +26,13 @@ const GetDocument = async (req, res) => {
       (user) => user.id.toString() === req.admin
     );
 
+    const auditLog = await AuditLog.createAuditLog({
+      userId: req.admin,
+      documentId: data._id,
+      action: "view_document",
+      ip: getIP(req),
+    });
+
     return res.status(200).json({
       data,
       permissions: permissions.permissions,
@@ -33,10 +42,8 @@ const GetDocument = async (req, res) => {
     // Fetch all users associated with the admin
     const data = await Document.getByAdminId(admin.documentList);
     const dataId = data.map((item) => item._id.toString());
-    console.log(dataId, "data Id");
     const share = await Document.getShareDocument(req.admin);
     const filteredShare = share.filter((item) => !dataId.includes(item._id.toString()));
-    // console.log(share, "Shared document");
     return res.status(200).json({ data, "share": filteredShare });
   }
 };
